@@ -35,5 +35,10 @@ public class UserDAO {
 			e.printStackTrace();
 		}
 	}
+	
+	public boolean checkIfUserExists(User user) {
+		
+		return false;
+	}
 
 }
