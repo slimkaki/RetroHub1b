@@ -5,7 +5,7 @@ Projeto 1b da disciplina Tecnologias Web da engenharia da computação do insper
 
     CREATE DATABASE RetroHub1b;
 
-    USE DATABASE RetroHub1b;
+    USE RetroHub1b;
 
     CREATE TABLE users(userId INT(32) AUTO_INCREMENT NOT NULL PRIMARY KEY, username VARCHAR(50) NOT NULL, password VARCHAR(255) NOT NULL, foto MEDIUMBLOB);
 
