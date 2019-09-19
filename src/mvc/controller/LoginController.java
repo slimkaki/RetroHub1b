@@ -9,4 +9,8 @@ public class LoginController {
 		return "login";
 	}
 
+	@RequestMapping("/cadastro")
+	public String entraCadastro() {
+		return "cadastro";
+	}
 }
