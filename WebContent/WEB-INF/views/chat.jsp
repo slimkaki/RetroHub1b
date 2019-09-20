@@ -16,7 +16,8 @@
 	<a href="login">log out</a>
 	<hr />
 	<%
-		DAO dao = new DAO();
+		SubjectDAO daoSub = new SubjectDAO();
+		UserDAO daoUser = new UserDAO();
 		String myURL = request.getParameter("myURL");
 		String chatName = request.getParameter("subjectName");
 	%>
@@ -26,12 +27,12 @@
 
 	<table border='1'>
 		<%
-			List<Message> messages = dao.getChatMessages(myURL);
+			List<Message> messages = daoSub.getChatMessages(myURL);
 			for (Message message : messages) {
 		%>
 		<tr>
 			<%
-				String user = dao.getUserById(message.getIdUser());
+				String user = daoUser.getUserById(message.getIdUser());
 			%>
 			<td><%=user%></td>
 			<td><%=message.getMsg()%></td>
