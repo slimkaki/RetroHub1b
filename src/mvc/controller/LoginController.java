@@ -15,7 +15,6 @@ public class LoginController {
 		return "login";
 	}
 
-	
 	@RequestMapping("/login")
 	public String LoginForm() {
 		return "login";
@@ -31,22 +30,22 @@ public class LoginController {
 	}
 
 	@RequestMapping("/cadastro")
-	public String entraCadastro(User user, String passwordConf) {
+	public String entraCadastro(User user, String passwordConf, HttpSession ses) {
 		
 		UserDAO Udao = new UserDAO();
 		
 		if (user.getPassword() != passwordConf) {
-			
+			ses.setAttribute("erro", "Senhas não batem!");
 			return "cadastro";
 		}
 		
-		if (!Udao.checkIfUserExists(user)) {
-			
-			Udao.addUser(user);
-			return "login";
+		if (Udao.checkIfUserExists(user)) {
+			ses.setAttribute("erro", "Usuário existente");
+			return "cadastro";	
 		}
 		
-		return "cadastroAgain";
+		Udao.addUser(user);
+		return "login";
 	}
 
 	@RequestMapping("logout")

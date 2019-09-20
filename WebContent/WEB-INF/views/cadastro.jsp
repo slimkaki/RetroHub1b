@@ -25,6 +25,7 @@
 		<br /> <input type='submit' />
 	</form>
 	
+	<span style="color:red">${erro}</span>
 
 </body>
 </html>
