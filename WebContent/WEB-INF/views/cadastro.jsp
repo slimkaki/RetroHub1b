@@ -13,13 +13,18 @@
 	<br /> Cadastre-se abaixo:
 	<br />
 	<br />
-	<form method='post'>
-		Usuário: <br /> <input type='text' name='name' required='required' />
-		<br /> Senha: <br /> <input type='password' name='password'
-			required='required' /> <br /> Confirmar senha: <br /> <input
-			type='password' name='passwordConf' required='required' /> <br /> <input
-			type='submit' />
+	<form action='/cadastro' method='post'>
+		Usuário: 
+		<br /> <input type='text' name='name' required='required' />
+		<br /> 
+		Senha: 
+		<br /> <input type='password' name='password' required='required' /> 
+		<br /> 
+		Confirmar senha: 
+		<br /> <input type='password' name='passwordConf' required='required' /> 
+		<br /> <input type='submit' />
 	</form>
+	
 
 </body>
 </html>
