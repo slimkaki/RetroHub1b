@@ -17,8 +17,8 @@ public class SubjectDAO {
 	
 	public SubjectDAO() {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection("jdbc:mysql://localhost/RetroHub1b", "root", "");
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			connection = DriverManager.getConnection("jdbc:mysql://localhost/RetroHub1b", "root", "abacaxienois");
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -72,6 +72,7 @@ public class SubjectDAO {
 	
 	public List<Message> getChatMessages(String url) {
 		List<Message> messages = (List) new ArrayList<Message>();
+		url = url.replace("/", "");
 		String sql = "SELECT * FROM " + url;
 		try {
 			PreparedStatement stmt = connection.prepareStatement(sql);
@@ -95,9 +96,28 @@ public class SubjectDAO {
 		return messages;
 	}
 	
+	public String getUserById(int id) {
+		String username = "";
+		String sql = "SELECT * FROM users WHERE userId=?";
+		try {
+			PreparedStatement stmt = connection.prepareStatement(sql);
+			stmt.setInt(1, id);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				username = rs.getString("username");
+			}
+			rs.close();
+			stmt.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return username;
+	}
+	
 	public void addMessage(Message message, String url) {
-		String sql = "INSERT INTO " + url + "(msg, idUser, time) VALUES (?,?,?)";
-		System.out.println("Adicionando msg a URL: " + url);
+		String sql = "INSERT INTO " + url + " (msg, idUser, time) VALUES (?,?,?)";
+		//System.out.println("Adicionando msg a URL: " + url);
 		try {
 			PreparedStatement stmt = connection.prepareStatement(sql);
 			stmt.setString(1, message.getMsg());
@@ -108,6 +128,15 @@ public class SubjectDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public String getSubjectNameFromURL(String URL) {
+		String name = URL;
+		if (URL.contains("_")) {
+			name = URL.replace("_", " ");
+		}
+		name = name.replace("/", "");
+		return name;
 	}
 	
 	public void close() {

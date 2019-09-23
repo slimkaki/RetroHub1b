@@ -17,13 +17,16 @@
 	<br />
 	
 	<form action='efetuaLogin' method='post'>
-		Usuário: <br /> <input type='text' name='username' required='required' /> <br /> 
+		Usuário: <br /> <input type='text' name='name' required='required' /> <br /> 
 		Senha: <br /> <input type='password' name='password' required='required' /> <br /> 
 		<input type='submit' value='Entrar'/>
 	</form>
 	
-	<br /> Ainda não tem um usuário?
-	<a href='cadastro'>Clique aqui!</a>
+	<hr/>
+	<br />
+	<form method='post' action='cadastro'>
+		Ainda não possui um usuário? <input type = "submit" value = "Cadastro"/>
+	</form>
 	<br />
 
 </body>
