@@ -44,6 +44,24 @@ public class SubjectDAO {
 		}
 	}
 	
+	public int messageCount(Subject subject) {
+		String sql = "SELECT COUNT(*) FROM " + subject.getSubject();
+		int count = 0;
+		try {
+			PreparedStatement stmt = connection.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				count = rs.getInt(1);
+			}
+			rs.close();
+			stmt.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+	
 	public List<Subject> getSubjectList() {
 		List<Subject> assuntos = (List) new ArrayList<Subject>();
 		String sql = "SELECT * FROM subjects";

@@ -21,7 +21,6 @@
 	</form>
 	<hr />
 	<%
-	
 	String chatURL = (String) request.getSession().getAttribute("chatURL");
 	SubjectDAO daoSub = new SubjectDAO();
 	String name = daoSub.getSubjectNameFromURL(chatURL);
