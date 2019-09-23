@@ -22,7 +22,7 @@ public class SubjectDAO {
 	public SubjectDAO() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			connection = DriverManager.getConnection("jdbc:mysql://localhost/RetroHub1b", "root", "");
+			connection = DriverManager.getConnection(url, user, password);
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}

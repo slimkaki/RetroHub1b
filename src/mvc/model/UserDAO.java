@@ -28,7 +28,7 @@ public class UserDAO {
 	public UserDAO() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			connection = DriverManager.getConnection("jdbc:mysql://localhost/RetroHub1b", "root", "");
+			connection = DriverManager.getConnection(url, user, password);
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -62,14 +62,12 @@ public class UserDAO {
 	
 	public boolean checkIfUserExists(User user) {
 		boolean exist = false;
-		String sql = "SELECT * FROM users WHERE username=? AND password=?";
+		String sql = "SELECT * FROM users WHERE username=?";
 		PreparedStatement stmt;
 		String name = user.getName();
-		String password = user.getPassword();
 		try {
 			stmt = connection.prepareStatement(sql);
 			stmt.setString(1, name);
-			stmt.setString(2, password);
 			ResultSet rs = stmt.executeQuery();
 
 			if(rs.next()){
