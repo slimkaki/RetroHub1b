@@ -21,6 +21,10 @@ public class UserDAO {
 	
 	private Connection connection = null;
 	
+	String url = System.getenv("mysql_url");
+	String user = System.getenv("mysql_user");
+	String password = System.getenv("mysql_password");
+	
 	public UserDAO() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
