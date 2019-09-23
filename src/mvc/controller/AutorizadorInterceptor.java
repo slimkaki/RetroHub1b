@@ -12,8 +12,8 @@ public class AutorizadorInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 		String uri = request.getRequestURI();
 		
-		if (uri.endsWith("registro") || 
-			uri.endsWith("efetuaRegistro") || 
+		if (uri.endsWith("cadastro") || 
+			uri.endsWith("efetuaCadastro") || 
 			uri.endsWith("login") || 
 			uri.endsWith("efetuaLogin") || 
 			uri.endsWith("getImage")) {

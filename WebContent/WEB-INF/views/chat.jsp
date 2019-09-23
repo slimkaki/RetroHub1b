@@ -11,29 +11,37 @@
 		import="java.util.*,mvc.controller.*,mvc.model.*"%>
 	<%-- <% session.setAttribute("backToMain", "true"); %> --%>
 	<h1>
-		<a href="main">RetroHub</a>
+		RetroHub
 	</h1>
-	<a href="login">log out</a>
+	<form action='backToMenu'>
+		<input type='submit' value='Voltar para o menu'>
+	</form>
+	<form action='logout'>
+		<input type='submit' value='logout'>
+	</form>
 	<hr />
 	<%
-		SubjectDAO daoSub = new SubjectDAO();
-		UserDAO daoUser = new UserDAO();
-		String myURL = request.getParameter("myURL");
-		String chatName = request.getParameter("subjectName");
+	
+	String chatURL = (String) request.getSession().getAttribute("chatURL");
+	SubjectDAO daoSub = new SubjectDAO();
+	String name = daoSub.getSubjectNameFromURL(chatURL);
+	UserDAO daoUser = new UserDAO();
 	%>
 	<h1>
-		Assunto do chat: <i><%=chatName%></i>
+		Assunto do chat: <i><%=name%></i>
 	</h1>
 
 	<table border='1'>
 		<%
-			List<Message> messages = daoSub.getChatMessages(myURL);
+			List<Message> messages = daoSub.getChatMessages(chatURL);
 			for (Message message : messages) {
 		%>
 		<tr>
 			<%
 				String user = daoUser.getUserById(message.getIdUser());
+				
 			%>
+			<td><img width=50px height=50px src="getImage?login=<%=user%>"/></td>
 			<td><%=user%></td>
 			<td><%=message.getMsg()%></td>
 			<td><%=message.getTime()%></td>
@@ -42,9 +50,10 @@
 			}
 		%>
 	</table>
-	<form method='post'>
+	<form action='enviaMsg' method='post'>
+		<input type='hidden' name='myURL' value=<%=chatURL%>/>
 		<input placeholder="Digite aqui sua mensagem" type='text'
-			name='newMsg' required='required' /> <input type='submit'
+			name='msg' required='required' /> <input type='submit'
 			placeholder='Enviar' />
 	</form>
 

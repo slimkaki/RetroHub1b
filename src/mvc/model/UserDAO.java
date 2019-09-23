@@ -1,5 +1,10 @@
 package mvc.model;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -18,21 +23,31 @@ public class UserDAO {
 	
 	public UserDAO() {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection("jdbc:mysql://localhost/RetroHub1b", "root", "");
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			connection = DriverManager.getConnection("jdbc:mysql://localhost/RetroHub1b", "root", "abacaxienois");
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void addUser(User user) {
+	public void addUser(User user) throws IOException {
 		MultipartFile pic = user.getPic();
-		String sql = "INSERT INTO users" + "(username,password,foto) VALUES (?, ?, ?)";
+		/* Rotina para salvar o arquivo no servidor*/
+		 if (!pic.isEmpty()) {
+		 	String fileName = pic.getOriginalFilename();
+		 	File uploads = new File("/tmp");
+		 	File file = new File(uploads, fileName);
+		 	try (InputStream input = pic.getInputStream()) {
+		 		Files.copy(input, file.toPath());
+		 	}
+		 }
 		try {
+			String sql = "INSERT INTO users" + "(username,password,foto) VALUES (?, ?, ?)";
 			PreparedStatement stmt;
 			stmt = connection.prepareStatement(sql);
 			stmt.setString(1, user.getName());
 			stmt.setString(2, user.getPassword());
+			stmt.setBinaryStream(3, pic.getInputStream());
 			stmt.execute();
 			stmt.close();
 
@@ -42,15 +57,21 @@ public class UserDAO {
 	}
 	
 	public boolean checkIfUserExists(User user) {
-		String sql = "SELECT * FROM users WHERE username=?";
+		boolean exist = false;
+		String sql = "SELECT * FROM users WHERE username=? AND password=?";
 		PreparedStatement stmt;
 		String name = user.getName();
+		String password = user.getPassword();
 		try {
 			stmt = connection.prepareStatement(sql);
 			stmt.setString(1, name);
+			stmt.setString(2, password);
 			ResultSet rs = stmt.executeQuery();
-			if (rs == null) {
-				return true;
+
+			if(rs.next()){
+				if(rs.getInt(1) != 0) {
+					exist=true;
+				}
 			}
 			rs.close();
 			stmt.close();
@@ -58,8 +79,7 @@ public class UserDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		return false;
+		return exist;
 	}
 	
 	public int getUserId(User user) {
@@ -132,6 +152,24 @@ public class UserDAO {
 		}
 		return users;
 		
+	}
+	
+	public byte[] buscaFoto(String login) {
+		byte[] imgData = null;
+		try {
+			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM users WHERE username=?");
+			stmt.setString(1, login);
+			ResultSet rs = stmt.executeQuery();
+			if(rs.next()) {
+				Blob image = rs.getBlob("foto");
+				imgData = image.getBytes(1, (int) image.length());
+			}
+			rs.close();
+			stmt.close();
+		} catch(SQLException e) {
+			System.out.println(e);
+		}
+		return imgData;
 	}
 	
 	public boolean login(User user) {
